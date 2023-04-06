@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+        }
+
+        input[type="file"] {
+            margin-bottom: 20px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #3e8e41;
+        }
+
+        #result {
+            margin-top: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #result img {
+            margin: 0 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Image Background Remover Tool</h1>
+    <form>
+        <input type="file" id="image-input">
+        <button type="button" onclick="removeBackground()">Remove Background</button>
+    </form>
+    <div id="result"></div>
+    <script>
+        function removeBackground() {
+            const input = document.getElementById("image-input");
+            const resultDiv = document.getElementById("result");
+
+            // Get the image file from the input field
+            const file = input.files[0];
+
+            // Check if a file was uploaded
+            if (!file) {
+                alert("Please select an image file");
+                return;
+            }
+
+            // Create a new FileReader object
+            const reader = new FileReader();
+
+            // When the FileReader has loaded the image, remove the background using your algorithm
+            reader.onload = function (event) {
+                const img = new Image();
+                img.onload = function () {
+                    // Remove the background here using your algorithm or a library like remove.bg
+                    const resultImage = img; // Replace this with the result of your algorithm or remove.bg
+
+                    // Display the original and result images to the user
+                    const originalImage = document.createElement("img");
+                    originalImage.src = event.target.result;
+
+                    const resultImageElement = document.createElement("img");
+                    resultImageElement.src = resultImage.src;
+
+                    resultDiv.innerHTML = "";
+                    resultDiv.appendChild(originalImage);
+                    resultDiv.appendChild(resultImageElement);
+                };
+                img.src = event.target.result;
+            }
+
+            // Read the image file as a data URL
+            reader.readAsDataURL(file);
+        }
+
+    </script>
+</body>
+
+</html>
