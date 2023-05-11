@@ -1,19 +1,119 @@
+<!-- Okay, here is a possible HTML, CSS and JavaScript code for a web application that will calculate the age from a given input date:
+
+```html -->
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Age Calculator</title>
-    <link rel="stylesheet" href="style.css">
-  </head>
-  <body>
-    <div class="container">
-      <h1>Age Calculator</h1>
-      <form>
-        <label for="birthdate">Enter your birthdate:</label>
-        <input type="date" id="birthdate" name="birthdate">
-        <button type="submit">Calculate age</button>
-      </form>
-      <div class="result"></div>
-    </div>
-    <script src="script.js"></script>
-  </body>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Age Calculator</title>
+  <style>
+    /* Add some style to the elements */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      text-align: center;
+      color: white;
+      background-color: #333;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    input {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      padding: 10px;
+      border: 1px solid #ccc;
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 20px;
+      color: green;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Age Calculator</h1>
+  <div class="container">
+    <!-- Add an input element to enter the date of birth -->
+    <label for="input">Enter your date of birth:</label>
+    <input id="input" type="date" placeholder="YYYY-MM-DD">
+
+    <!-- Add an output element to display the age -->
+    <p id="output"></p>
+  </div>
+
+  <!-- Add a script element to run the JavaScript code -->
+  <script>
+    // Get the input element from the HTML document
+    let input = document.getElementById("input");
+
+    // Get the output element from the HTML document
+    let output = document.getElementById("output");
+
+    // Define a function to calculate the age from a given date string
+    function calculateAge(dateString) {
+      // Parse the date string into a Date object
+      let date = new Date(dateString);
+
+      // Get the current date
+      let today = new Date();
+
+      // Calculate the difference in years, months and days
+      let years = today.getFullYear() - date.getFullYear();
+      let months = today.getMonth() - date.getMonth();
+      let days = today.getDate() - date.getDate();
+
+      // Adjust the values if needed
+      if (months < 0 || (months === 0 && days < 0)) {
+        years--;
+        months += 12;
+      }
+      if (days < 0) {
+        months--;
+        days += new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+      }
+
+      // Return the age as a string
+      return `${years} years, ${months} months and ${days} days`;
+    }
+
+    // Add an event listener to the input element to update the output element when the input changes
+    input.addEventListener("input", function () {
+      // Get the value of the input element
+      let value = input.value;
+
+      // Check if the value is a valid date string
+      if (Date.parse(value)) {
+        // Calculate the age and display it in the output element
+        let age = calculateAge(value);
+        output.textContent = `Your age is ${age}.`;
+      } else {
+        // Display an error message in the output element
+        output.textContent = "Please enter a valid date.";
+      }
+    });
+  </script>
+</body>
+
 </html>
+```

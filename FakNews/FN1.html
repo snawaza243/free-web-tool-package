@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Fake News Detector</title>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Fake News Detector</h1>
+        <form>
+            <div class="input-group">
+                <label for="news-input">Enter News Text:</label>
+                <textarea id="news-input" name="news-input"></textarea>
+            </div>
+            <button type="button" id="detect-button">Detect Fake News</button>
+        </form>
+        <div id="result"></div>
+    </div>
+    <style>
+        body {
+            background-color: #f2f2f2;
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+            padding-top: 50px;
+        }
+
+        h1 {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-flow: column nowrap;
+            justify-content: space-around;
+            align-items: center;
+            padding-bottom: 20px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+        }
+
+        .input-group label {
+            width: 50%;
+            font-size: 18px;
+        }
+
+        .input-group textarea {
+            width: 50%;
+            font-size: 18px;
+            padding: 10px;
+            border-radius: 4px;
+            border: none;
+            height: 150px;
+        }
+
+        #detect-button {
+            font-size: 18px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px;
+            margin-right: 10px;
+        }
+
+        #detect-button:hover {
+            background-color: #3e8e41;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+    <script>
+        const detectButton = document.getElementById("detect-button");
+
+        detectButton.addEventListener("click", () => {
+            const newsInput = document.getElementById("news-input").value;
+
+            if (newsInput.trim() === "") {
+                document.getElementById("result").textContent = "Please enter some news text.";
+                return;
+            }
+
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", "https://api.openai.com/v1/engines/davinci-codex/completions");
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.setRequestHeader("Authorization", "Bearer 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");
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    const response = JSON.parse(xhr.responseText);
+
+                    if (response.choices[0].text.toLowerCase().indexOf("true") !== -1) {
+                        document.getElementById("result").style.color = "red";
+                        document.getElementById("result").textContent = "This news is likely to be fake.";
+                    } else {
+                        document.getElementById("result").style.color = "green";
+                        document.getElementById("result").textContent = "This news is likely to be true.";
+                    }
+                }
+            };
+
+            const data = JSON.stringify({
+                prompt: `Detect whether the following news is real or fake:\n\n"${newsInput}"\n\nResult:`,
+                max_tokens: 1,
+                model: "davinci-codex",
+                temperature: 0.7
+            });
+
+            xhr.send(data);
+        });
+    </script>
+</body>
+
+</html>

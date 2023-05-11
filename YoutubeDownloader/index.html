@@ -1,0 +1,116 @@
+Okay, here is a possible HTML, CSS and JavaScript code for a web application that will download the YouTube video from a given link:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>YouTube Downloader</title>
+  <style>
+    /* Add some style to the elements */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      text-align: center;
+      color: white;
+      background-color: #333;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    input {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      padding: 10px;
+      border: 1px solid #ccc;
+      margin-bottom: 20px;
+    }
+
+    button {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      padding: 10px;
+      border: none;
+      background-color: #333;
+      color: white;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>YouTube Downloader</h1>
+  <div class="container">
+    <!-- Add an input element to enter the YouTube video link -->
+    <label for="input">Enter the YouTube video link:</label>
+    <input id="input" type="url" placeholder="https://www.youtube.com/watch?v=...">
+
+    <!-- Add a button element to download the video -->
+    <button id="button">Download</button>
+  </div>
+
+  <!-- Add a script element to run the JavaScript code -->
+  <script>
+    // Get the input element from the HTML document
+    let input = document.getElementById("input");
+
+    // Get the button element from the HTML document
+    let button = document.getElementById("button");
+
+    // Define a function to download the video from a given link
+    function downloadVideo(link) {
+      // Create a new anchor element
+      let anchor = document.createElement("a");
+
+      // Set the href attribute to the link with a download parameter
+      anchor.href = link + "&dl=1";
+
+      // Set the download attribute to the video title
+      anchor.download = link.split("=")[1] + ".mp4";
+
+      // Append the anchor element to the body
+      document.body.appendChild(anchor);
+
+      // Click the anchor element
+      anchor.click();
+
+      // Remove the anchor element from the body
+      document.body.removeChild(anchor);
+    }
+
+    // Add an event listener to the button element to download the video when the button is clicked
+    button.addEventListener("click", function () {
+      // Get the value of the input element
+      let value = input.value;
+
+      // Check if the value is a valid YouTube video link
+      if (value.startsWith("https://www.youtube.com/watch?v=")) {
+        // Download the video and display an alert message
+        downloadVideo(value);
+        alert("Downloading...");
+      } else {
+        // Display an error message in an alert
+        alert("Please enter a valid YouTube video link.");
+      }
+    });
+  </script>
+</body>
+</html>
+```

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Time Unit Converter</title>
+	<style>
+		/* Define new classes for CSS styling */
+		.container-si {
+			margin: 0 auto;
+			padding: 20px;
+			max-width: 600px;
+			background-color: #f7f7f7;
+			border-radius: 5px;
+			box-shadow: 0px 0px 5px #333;
+		}
+
+		.input-group {
+			margin-bottom: 15px;
+		}
+
+		.container-si label {
+			display: block;
+			margin-bottom: 5px;
+			font-weight: bold;
+		}
+
+		.container-si input[type="number"] {
+			padding: 10px;
+			border-radius: 5px;
+			border: 1px solid #ccc;
+			width: 100%;
+		}
+
+		.container-si select {
+			padding: 10px;
+			border-radius: 5px;
+			border: 1px solid #ccc;
+			width: 100%;
+		}
+
+		.container-si button {
+			padding: 10px 20px;
+			background-color: #4CAF50;
+			color: #fff;
+			border: none;
+			border-radius: 5px;
+			cursor: pointer;
+			transition: background-color 0.3s ease;
+		}
+
+		.container-si button:hover {
+			background-color: #2E8B57;
+		}
+
+		.result {
+			margin-top: 20px;
+			font-size: 24px;
+			font-weight: bold;
+			text-align: center;
+		}
+	</style>
+</head>
+<body>
+	<div class="container-si">
+		<h1>Time Unit Converter</h1>
+		<div class="input-group">
+			<label for="input-value">Value:</label>
+			<input type="number" id="input-value" placeholder="Enter a value" />
+		</div>
+		<div class="input-group">
+			<label for="input-unit">Unit:</label>
+			<select id="input-unit">
+				<option value="s">seconds (s)</option>
+				<option value="ms">milliseconds (ms)</option>
+				<option value="min">minutes (min)</option>
+				<option value="h">hours (h)</option>
+				<option value="d">days (d)</option>
+			</select>
+		</div>
+		<div class="input-group">
+			<label for="output-unit">Convert to:</label>
+			<select id="output-unit">
+				<option value="s">seconds (s)</option>
+				<option value="ms">milliseconds (ms)</option>
+				<option value="min">minutes (min)</option>
+				<option value="h">hours (h)</option>
+				<option value="d">days (d)</option>
+			</select>
+		</div>
+		<button id="convert-btn">Convert</button>
+		<div class="result" id="result"></div>
+	</div>
+
+	<script>
+		const convertBtn = document.getElementById("convert-btn");
+		const inputValue = document.getElementById("input-value");
+		const inputUnit = document.getElementById("input-unit");
+		const outputUnit = document.getElementById("output-unit");
+		const result = document.getElementById("result");
+
+		// Conversion rates
+		const conversionRates = {
+			s: {
+				s: 1,
+				ms: 1000,
+				min: 1/60,
+				h: 1/3600,
+				d: 1/86400
+			},
+			ms: {
+				s: 1/1000,
+				ms: 1,
+				min: 1/60000,
+				h: 1/3600000,
+				d: 1/86400000
+			},
+			min: {
+				s: 60,
+				ms: 60000,
+				min: 1,
+				h: 1/60,
+				d: 1/1440
+			},
+			h: {
+				s: 3600,
+				ms: 3600000,
+				min: 60,
+				h: 1,
+				d: 1/24
+			},
+			d: {
+				s: 86400,
+				ms: 86400000,
+				min: 1440,
+				h: 24,
+				d: 1
+			}
+		};
+
+		// Function to perform the conversion
+		function convert() {
+			const input = inputValue.value;
+			const fromUnit = inputUnit.value;
+			const toUnit = outputUnit.value;
+
+			const conversionRate = conversionRates[fromUnit][toUnit];
+			const output = input * conversionRate;
+
+			result.innerHTML = `${input} ${fromUnit} = ${output} ${toUnit}`;
+		}
+
+		// Add event listener to the Convert button
+		convertBtn.addEventListener("click", convert);
+	</script>
+</body>
+</html>

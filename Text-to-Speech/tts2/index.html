@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Text to Speech Converter</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" type="text/css" href="style.css"> -->
+    <style>
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 200px;
+            margin-bottom: 20px;
+            padding: 10px;
+            font-size: 16px;
+            line-height: 1.5;
+            resize: none;
+        }
+
+        select {
+            font-size: 16px;
+            padding: 8px;
+            margin-right: 10px;
+        }
+
+        button {
+            font-size: 16px;
+            padding: 8px 12px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        audio {
+            display: none;
+        }
+
+        #download-btn {
+            display: none;
+            margin-left: 20px;
+            font-size: 16px;
+            padding: 8px 12px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Text to Speech Converter</h1>
+        <div>
+            <textarea id="input-text" placeholder="Enter text to convert"></textarea>
+        </div>
+        <div>
+            <select id="language">
+                <option value="en-US">English (US)</option>
+                <option value="en-GB">English (UK)</option>
+                <option value="es-ES">Spanish</option>
+                <option value="fr-FR">French</option>
+                <!-- add more language options here -->
+            </select>
+            <button id="convert-btn">Convert</button>
+            <audio id="audio"></audio>
+            <a id="download-btn" href="#" download>Download as MP3</a>
+        </div>
+    </div>
+    <script>
+        const inputText = document.getElementById('input-text');
+        const languageSelect = document.getElementById('language');
+        const convertBtn = document.getElementById('convert-btn');
+        const audioElem = document.getElementById('audio');
+        const downloadBtn = document.getElementById('download-btn');
+
+        // function to convert text to speech and download as MP3
+        function convertToSpeech() {
+            const language = languageSelect.value;
+            const ssml = `<speak>${inputText.value}</speak>`;
+
+            const synthesis = window.speechSynthesis;
+            const utterance = new SpeechSynthesisUtterance();
+            utterance.lang = language;
+            utterance.ssml = ssml;
+
+            synthesis.speak(utterance);
+
+            utterance.onend = () => {
+                const audioBlob = new Blob([utterance.audioData], { type: 'audio/mpeg' });
+                const audioUrl = URL.createObjectURL(audioBlob);
+
+                audioElem.src = audioUrl;
+                downloadBtn.href = audioUrl;
+                downloadBtn.style.display = 'inline';
+            };
+        }
+
+        convertBtn.addEventListener('click', convertToSpeech);
+        const inputText = document.getElementById('input-text');
+        const languageSelect = document.getElementById('language');
+        const convertBtn = document.getElementById('convert-btn');
+        const audioElem = document.getElementById('audio');
+        const downloadBtn = document.getElementById('download-btn');
+
+        // function to convert text to speech and download as MP3
+        function convertToSpeech() {
+            const language = languageSelect.value;
+            const ssml = `<speak>${inputText.value}</speak>`;
+
+            const synthesis = window.speechSynthesis;
+            const utterance = new SpeechSynthesisUtterance();
+            utterance.lang = language;
+            utterance.ssml = ssml;
+
+            synthesis.speak(utterance);
+
+            utterance.onend = () => {
+                const audioBlob = new Blob([utterance.audioData], { type: 'audio/mpeg' });
+                const audioUrl = URL.createObjectURL(audioBlob);
+
+                audioElem.src = audioUrl;
+                downloadBtn.href = audioUrl;
+                downloadBtn.style.display = 'inline';
+            };
+        }
+
+        convertBtn.addEventListener('click', convertToSpeech);
+
+    </script>
+</body>
+
+</html>

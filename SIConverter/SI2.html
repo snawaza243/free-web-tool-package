@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Length Unit Converter</title>
+	<style>
+		/* Define new classes for CSS styling */
+		.container-si {
+			margin: 0 auto;
+			padding: 20px;
+			max-width: 600px;
+			background-color: #f7f7f7;
+			border-radius: 5px;
+			box-shadow: 0px 0px 5px #333;
+		}
+
+        #input-value{
+            width: 577px;
+        }
+		.input-group {
+			margin-bottom: 15px;
+		}
+
+		.label {
+			display: block;
+			margin-bottom: 5px;
+			font-weight: bold;
+		}
+
+		#input-value {
+			padding: 10px;
+			border-radius: 5px;
+			border: 1px solid #ccc;
+			/* width: 100%; */
+		}
+
+		#input-unit, #output-unit {
+			padding: 10px;
+			border-radius: 5px;
+			border: 1px solid #ccc;
+			width: 100%;
+		}
+
+		#convert-btn {
+			padding: 10px 20px;
+			background-color: #4CAF50;
+			color: #fff;
+			border: none;
+			border-radius: 5px;
+			cursor: pointer;
+			transition: background-color 0.3s ease;
+		}
+
+		#convert-btn:hover {
+			background-color: #2E8B57;
+		}
+
+		.result {
+			margin-top: 20px;
+			font-size: 24px;
+			font-weight: bold;
+			text-align: center;
+		}
+	</style>
+</head>
+<body>
+	<div class="container-si">
+		<h1>Length Unit Converter</h1>
+		<div class="input-group">
+			<label class="label" for="input-value">Value:</label>
+			<input type="number" id="input-value" placeholder="Enter a value" />
+		</div>
+		<div class="input-group">
+			<label class="label" for="input-unit">Unit:</label>
+			<select id="input-unit">
+				<option value="m">meters (m)</option>
+				<option value="cm">centimeters (cm)</option>
+				<option value="mm">millimeters (mm)</option>
+				<option value="km">kilometers (km)</option>
+				<option value="mi">miles (mi)</option>
+				<option value="ft">feet (ft)</option>
+				<option value="in">inches (in)</option>
+				<option value="yd">yards (yd)</option>
+			</select>
+		</div>
+		<div class="input-group">
+			<label class="label" for="output-unit">Convert to:</label>
+			<select id="output-unit">
+				<option value="m">meters (m)</option>
+				<option value="cm">centimeters (cm)</option>
+				<option value="mm" >millimeters (mm)</option>
+				<option value="km" selected>kilometers (km)</option>
+				<option value="mi">miles (mi)</option>
+				<option value="ft">feet (ft)</option>
+				<option value="in">inches (in)</option>
+				<option value="yd">yards (yd)</option>
+			</select>
+		</div>
+		<button id="convert-btn">Convert</button>
+		<div class="result" id="result"></div>
+	</div>
+
+	<script>
+		const convertBtn = document.getElementById("convert-btn");
+		const inputValue = document.getElementById("input-value");
+		const inputUnit = document.getElementById("input-unit");
+		const outputUnit = document.getElementById("output-unit");
+		const result = document.getElementById("result");
+
+		// Conversion rates
+		const conversionRates = {
+			m: {
+				m: 1,
+				cm: 100,
+				mm: 1000,
+				km: 0.001,
+				mi: 0.000621371,
+				ft: 3.28084,
+				in: 39.3701,
+				yd: 1.09361
+			},
+			cm: {
+				m: 0.01,
+				cm: 1,
+				mm: 10,
+				km: 0.00001,
+				mi: 0.00000621371,
+				ft: 0.0328084,
+				in: 0.393701,
+				yd: 0.0109361
+			},
+			mm: {
+				m: 0.001,
+				cm: 0.1,
+				mm: 1,
+				km: 0.000001,
+				mi: 0.000000621371,
+				ft: 0.00328084,
+				in: 0.0393701,
+				yd: 0.00109361
+			},
+			km: {
+				m: 1000,
+				cm: 100000,
+				mm: 1000000,
+				km: 1,
+				mi: 0.621371,
+				ft: 3280.84,
+				in: 39370.1,
+				yd: 1093.61
+			},
+			mi: {
+				m: 1609.34,
+				cm: 160934,
+				mm: 1609344,
+				km: 1.60934,
+				mi: 1,
+				ft: 5280,
+				in: 63360,
+				yd: 1760
+			},
+			ft: {
+				m: 0.3048,
+				cm: 30.48,
+				mm: 304.8,
+				km: 0.0003048,
+				mi: 0.000189394,
+				ft: 1,
+				in: 12,
+				yd: 0.333333
+			},
+			in: {
+				m: 0.0254,
+				cm: 2.54,
+				mm: 25.4,
+				km: 0.0000254,
+				mi: 0.0000157828,
+				ft: 0.0833333,
+				in: 1,
+				yd: 0.0277778
+			},
+			yd: {
+				m: 0.9144,
+				cm: 91.44,
+				mm: 914.4,
+				km: 0.0009144,
+				mi: 0.000568182,
+				ft: 3,
+				in: 36,
+				yd: 1
+			}
+		};
+
+		// Function to perform the conversion
+		function convert() {
+			const input = inputValue.value;
+			const fromUnit = inputUnit.value;
+			const toUnit = outputUnit.value;
+
+			const conversionRate = conversionRates[fromUnit][toUnit];
+			const output = input * conversionRate;
+
+			result.innerHTML = `${input} ${fromUnit} = ${output} ${toUnit}`;
+		}
+
+		// Add event listener to the Convert button
+		convertBtn.addEventListener("click", convert);
+	</script>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Random Quote Generator</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+    <div class="post-title-head">
+        Generate New Quote
+    </div>
+    <div class="container-quote">
+        <div id="quote"></div>
+        <div id="author"></div>
+        <button id="new-quote-button" title="New Quote!">New Quote!</button>
+        <button id="copy-button" title="Copy Quote!">Copy Quote!</button>
+    </div>
+
+    <style>
+        body {
+            background-color: #f2f2f2;
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .post-title-head{
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            margin: 5px;
+            padding: 20px 10px;
+            font-size: 35px;
+
+        }
+
+        .container-quote {
+            /* max-width: 600px; */
+            /* margin: 0 50px;
+            text-align: center;
+            padding-top: 50px; */
+
+            margin: 50px auto;
+			padding: 20px;
+            text-align: center;
+			background-color: #f7f7f7;
+			border-radius: 5px;
+			box-shadow: 0px 0px 5px #333;
+            width: 80%;
+
+        }
+
+        #quote {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            line-height: 40px;
+        }
+
+        #author {
+            font-size: 24px;
+            font-style: italic;
+            margin: 50px auto;
+            text-align: right;
+        }
+
+        #copy-button,
+        #new-quote-button {
+            font-size: 18px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        #copy-button:hover,
+        #new-quote-button:hover {
+            background-color: #3e8e41;
+        }
+    </style>
+    <script>
+        const quoteElement = document.getElementById("quote");
+        const authorElement = document.getElementById("author");
+        const copyButton = document.getElementById("copy-button");
+        const newQuoteButton = document.getElementById("new-quote-button");
+
+        async function generateQuote() {
+            const response = await fetch("https://api.quotable.io/random");
+            const data = await response.json();
+            const quote = data.content;
+            const author = data.author;
+            quoteElement.textContent = `"${quote}"`;
+            authorElement.textContent = `- ${author}`;
+        }
+
+        function copyQuote() {
+            const quoteText = quoteElement.textContent + " " + authorElement.textContent;
+            navigator.clipboard.writeText(quoteText);
+            copyButton.textContent = "Copied!";
+            setTimeout(() => {
+                copyButton.textContent = "Copy Quote";
+            }, 1000);
+        }
+
+        newQuoteButton.addEventListener("click", generateQuote);
+        copyButton.addEventListener("click", copyQuote);
+        generateQuote();
+    </script>
+</body>
+
+</html>

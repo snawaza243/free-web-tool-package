@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="quiz-form">
+        <h1>Quiz</h1>
+        <form id="quiz-form">
+            <div class="form-group">
+                <label for="category">Category:</label>
+                <select id="category" name="category">
+                    <option value="">--Select Category--</option>
+                    <option value="9">General Knowledge</option>
+                    <option value="10">Books</option>
+                    <option value="11">Film</option>
+                    <option value="12">Music</option>
+                </select>
+            </div>
+            <button type="submit">Start Quiz</button>
+        </form>
+    </div>
+
+    <style>
+        .quiz-form {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .quiz-form h1 {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .quiz-form form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .quiz-form .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .quiz-form label {
+            display: block;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .quiz-form select {
+            font-size: 1.5rem;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            border: none;
+            background-color: #f0f0f0;
+            margin-bottom: 1rem;
+        }
+
+        .quiz-form button {
+            font-size: 1.5rem;
+            padding: 1rem 2rem;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+        }
+
+        .quiz-form button:hover {
+            background-color: #0069d9;
+        }
+    </style>
+    <script>
+
+        const API_URL = 'https://opentdb.com/api.php?amount=10&category=9&type=multiple';
+
+        function getQuizQuestions(categoryId) {
+            const apiUrl = `${API_URL}?amount=10&category=${categoryId}&type=multiple&encode=url3986`;
+            return fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => data.results)
+                .catch(error => console.error(error));
+        }
+
+        function decodeHtmlEntities(text) {
+            const el = document.createElement('textarea');
+            el.innerHTML = text;
+            return el.value;
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function generateQuizForm(questions) {
+            const quizForm = document.getElementById('quiz-form');
+            quizForm.innerHTML = '';
+
+            questions.forEach((question, index) => {
+                const decodedQuestion = decodeHtmlEntities(question.question);
+                const decodedCorrectAnswer = decodeHtmlEntities(question.correct_answer);
+                const decodedIncorrectAnswers = question.incorrect_answers.map(answer => decodeHtmlEntities(answer));
+                const allAnswers = shuffleArray([...decodedIncorrectAnswers, decodedCorrectAnswer]);
+                const answerOptions = allAnswers.map(answer => `
+      <label>
+        <input type="radio" name="question-${index}" value="${answer}">
+        ${answer}
+      </label>
+    `).join('');
+
+                const questionHtml = `
+      <div class="question">
+        <h2>${decodedQuestion}</h2>
+        <div class="answer-options">
+          ${answerOptions}
+        </div>
+      </div>
+    `;
+
+                quizForm.insertAdjacentHTML('beforeend', questionHtml);
+            });
+
+            quizForm.insertAdjacentHTML('beforeend', `
+    <button type="submit">Submit</button>
+  `);
+        }
+
+        document.getElementById('quiz-form').addEventListener('submit', event => {
+            event.preventDefault();
+            const categoryId = document.getElementById('category').value;
+            getQuizQuestions(categoryId).then(questions => generateQuizForm(questions));
+        });
+    </script>
+</body>
+
+
+</html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Personal Finance Tool</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+    <div id="pdf-content" class="container-ft">
+        <h1>Personal Finance Tool</h1>
+        <form>
+            <div class="input-group">
+                <label for="income">Monthly Income:</label>
+                <input type="number" id="income" name="income">
+            </div>
+
+            <div class="input-group">
+                <label for="rent">Rent/Mortgage:</label>
+                <input type="number" id="rent" name="rent">
+            </div>
+
+            <div class="input-group">
+                <label for="utilities">Utilities:</label>
+                <input type="number" id="utilities" name="utilities">
+            </div>
+
+            <div class="input-group">
+                <label for="groceries">Groceries:</label>
+                <input type="number" id="groceries" name="groceries">
+            </div>
+
+            <div class="input-group">
+                <label for="transportation">Transportation:</label>
+                <input type="number" id="transportation" name="transportation">
+            </div>
+
+            <div class="input-group">
+                <label for="other-expenses">Other Expenses:</label>
+                <input type="number" id="other-expenses" name="other-expenses">
+            </div>
+
+            <button type="button" id="calculate-button">Calculate</button>
+            <button type="button" id="pdf-button">Generate PDF</button>
+        </form>
+
+        <table id="budget-summary">
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Income</td>
+                    <td id="income-output">$0</td>
+                </tr>
+                <tr>
+                    <td>Expenses</td>
+                    <td id="expenses-output">$0</td>
+                </tr>
+                <tr>
+                    <td>Net Income</td>
+                    <td id="net-income-output">$0</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+
+    <style>
+        body {
+            background-color: #f2f2f2;
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container-ft {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+            padding-top: 50px;
+        }
+
+        .container-ft h1 {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .container-ft form {
+            display: flex;
+            flex-flow: column nowrap;
+            justify-content: space-around;
+            align-items: center;
+            padding-bottom: 20px;
+        }
+
+        .container-ft .input-group {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+        }
+
+        .container-ft .input-group label {
+            width: 50%;
+            font-size: 18px;
+        }
+
+        .container-ft .input-group input[type="number"] {
+            width: 50%;
+            font-size: 18px;
+            padding: 10px;
+            border-radius: 4px;
+            border: none;
+        }
+
+        .container-ft #calculate-button,
+        .container-ft #pdf-button {
+            font-size: 18px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px;
+            margin-right: 10px;
+        }
+
+        .container-ft #calculate-button:hover,
+        .container-ft #pdf-button:hover {
+            background-color: #3e8e41;
+        }
+
+        .container-ft table {
+            border-collapse: collapse;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .container-ft table th,
+        .container-ft table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+
+        .container-ft table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        .container-ft table td {
+            text-align: right;
+        }
+
+        .container-ft table td#income-output,
+        .container-ft table td#expenses-output,
+        .container-ft table td#net-income-output {
+            font-weight: bold;
+        }
+    </style>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"
+        integrity="sha512-9GmJjidVU7RwB4FfByd3QKZIh58d6vG4wqg4S1M+H3X9gKx1JGQh9J5ZVJgG9cO/p6WjIyQoBqX6X5R6HZ2Jw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        const incomeInput = document.getElementById("income");
+        const rentInput = document.getElementById("rent");
+        const utilitiesInput = document.getElementById("utilities");
+        const groceriesInput = document.getElementById("groceries");
+        const transportationInput = document.getElementById("transportation");
+        const otherExpensesInput = document.getElementById("other-expenses");
+        const calculateButton = document.getElementById("calculate-button");
+        const pdfButton = document.getElementById("pdf-button");
+
+        calculateButton.addEventListener("click", () => {
+            const income = parseFloat(incomeInput.value) || 0;
+            const rent = parseFloat(rentInput.value) || 0;
+            const utilities = parseFloat(utilitiesInput.value) || 0;
+            const groceries = parseFloat(groceriesInput.value) || 0;
+            const transportation = parseFloat(transportationInput.value) || 0;
+            const otherExpenses = parseFloat(otherExpensesInput.value) || 0;
+
+            const totalExpenses = rent + utilities + groceries + transportation + otherExpenses;
+            const netIncome = income - totalExpenses;
+
+            document.getElementById("income-output").textContent = `$${income.toFixed(2)}`;
+            document.getElementById("expenses-output").textContent = `$${totalExpenses.toFixed(2)}`;
+            document.getElementById("net-income-output").textContent = `$${netIncome.toFixed(2)}`;
+        });
+
+        pdfButton.addEventListener("click", () => {
+            const pdfContent = document.getElementById("pdf-content");
+            const pdf = new jsPDF();
+            pdf.html(pdfContent, {
+                callback: function (pdf) {
+                    pdf.save("personal-finance.pdf");
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

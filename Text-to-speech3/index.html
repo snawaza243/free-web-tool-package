@@ -1,0 +1,253 @@
+<!-- <!DOCTYPE html>
+<html>
+  <head>
+    <title>Text-to-Speech Demo</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+      }
+      h1 {
+        margin-top: 50px;
+      }
+      .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 30px;
+      }
+      .textarea-container {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+      }
+      textarea {
+        width: 80%;
+        height: 150px;
+        font-size: 18px;
+        padding: 10px;
+        resize: none;
+        border-radius: 10px;
+        border: 2px solid #d3d3d3;
+      }
+      button {
+        background-color: #4CAF50;
+        color: white;
+        font-size: 16px;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-top: 20px;
+      }
+      button:hover {
+        background-color: #3e8e41;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Text-to-Speech Demo</h1>
+    <div class="container">
+      <div class="textarea-container">
+        <textarea id="text-to-speak" placeholder="Enter text to speak"></textarea>
+      </div>
+      <button onclick="speak()">Speak</button>
+    </div>
+
+    <script>
+      const speak = () => {
+        const text = document.getElementById("text-to-speak").value;
+        const utterance = new SpeechSynthesisUtterance(text);
+        window.speechSynthesis.speak(utterance);
+      };
+    </script>
+  </body>
+</html> -->
+
+
+
+
+
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Text-to-Speech Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        h1 {
+            margin-top: 50px;
+        }
+
+        textarea {
+            width: 80%;
+            height: 150px;
+            margin-top: 30px;
+            font-size: 18px;
+            padding: 10px;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            font-size: 16px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #3e8e41;
+        }
+
+        #download {
+            background-color: #008CBA;
+            margin-left: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Text-to-Speech Demo</h1>
+    <textarea id="text-to-speak" placeholder="Enter text to speak"></textarea>
+    <div class="btn-container">
+        <button onclick="speak()">Speak</button>
+        <a href="#" id="download" download><button>Download MP3</button></a>
+    </div>
+
+    <script>
+        const speak = () => {
+            const text = document.getElementById("text-to-speak").value;
+            const utterance = new SpeechSynthesisUtterance(text);
+            window.speechSynthesis.speak(utterance);
+            utterance.onend = () => {
+                const blob = new Blob([text], { type: "audio/mpeg" });
+                const url = URL.createObjectURL(blob);
+                const link = document.getElementById("download");
+                link.href = url;
+            };
+        };
+    </script>
+</body>
+
+</html>
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Text-to-Speech Demo</title>
+    <style>
+        .box-tts {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        .h1-tts {
+            margin-top: 50px;
+        }
+
+        .textarea-tts {
+            width: 80%;
+            height: 150px;
+            margin-top: 30px;
+            font-size: 18px;
+            padding: 10px;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .button-tts {
+            background-color: #4CAF50;
+            color: white;
+            font-size: 16px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .button-tts:hover {
+            background-color: #3e8e41;
+        }
+
+        #download {
+            background-color: #008CBA;
+            margin-left: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box-tts">
+        <h1 class="h1-tts">Text-to-Speech Demo</h1>
+        
+        <textarea class="textarea-tts" id="text-to-speak" placeholder="Enter text to speak"></textarea>
+        <div class="btn-container-tts" class="btn-container">
+            <button class="button-tts" onclick="speak()">Speak</button>
+            <a class="button-tts" href="#" id="download" download><button>Download MP3</button></a>
+        </div>
+    </div>
+
+    <script>
+        const speak = () => {
+            const text = document.getElementById("text-to-speak").value;
+            const utterance = new SpeechSynthesisUtterance(text);
+            window.speechSynthesis.speak(utterance);
+            utterance.onend = () => {
+                const blob = new Blob([text], { type: "audio/mpeg" });
+                const url = URL.createObjectURL(blob);
+                const link = document.getElementById("download");
+                link.href = url;
+            };
+        };
+    </script>
+
+    <span class="tags-span">
+<span> Text-to-speech technology</span>
+<span> Voice synthesis</span>
+<span> Speech synthesis</span>
+<span> Online text-to-speech</span>
+<span> AI-powered text-to-speech</span>
+<span> Natural-sounding voices</span>
+<span> Accessibility tools</span>
+<span> Audio narration</span>
+<span> TTS software</span>
+<span> Web-based text-to-speech</span>
+<span> Speech recognition</span>
+<span> Virtual assistants</span>
+<span> Assistive technology</span>
+<span> Multilingual text-to-speech</span>
+<span> Audio book narration.</span>
+    </span>
+    <style>
+        .tags-span span{
+            background-color:azure;
+            border-radius: 5px;
+            margin: 15px;
+            padding: 5px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+
+        }
+    </style>
+</body>
+
+</html>

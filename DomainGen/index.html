@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check Domain Availability</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+</head>
+
+<body>
+    <header>
+        <h1>Check Domain Availability</h1>
+    </header>
+
+    <form>
+        <input type="text" id="domainName" placeholder="Enter domain name" required>
+        <button type="button" id="domainCheck" onclick="checkDomain()">Check</button>
+    </form>
+
+    <div id="result">
+        <p>Domain availability status will show here</p>
+        <!-- <span id="good-response">Congratulations! <span class="inserted-domain">code-sam.in</span> domain is available</span> -->
+        <br>
+        <!-- <span id="bad-response">Sorry! <span class="inserted-domain">code-sam.in</span> is not available</span> -->
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>

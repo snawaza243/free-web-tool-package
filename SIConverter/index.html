@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>SI Unit Converter</title>
+    <style>
+        /* Define new classes for CSS styling */
+        .container {
+            margin: 0 auto;
+            padding: 20px;
+            max-width: 600px;
+            background-color: #f7f7f7;
+            border-radius: 5px;
+            box-shadow: 0px 0px 5px #333;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .container label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .container input[type="number"] {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            width: 100%;
+        }
+
+        .container select {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            width: 100%;
+        }
+
+        .container button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .container button:hover {
+            background-color: #2E8B57;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>SI Unit Converter</h1>
+        <div class="input-group">
+            <label for="input-value">Value:</label>
+            <input type="number" id="input-value" placeholder="Enter a value" />
+        </div>
+        <div class="input-group">
+            <label for="input-unit">Unit:</label>
+            <select id="input-unit">
+                <option value="m">meters (m)</option>
+                <option value="kg">kilograms (kg)</option>
+                <option value="s">seconds (s)</option>
+            </select>
+        </div>
+        <div class="input-group">
+            <label for="output-unit">Convert to:</label>
+            <select id="output-unit">
+                <option value="m">meters (m)</option>
+                <option value="kg">kilograms (kg)</option>
+                <option value="s">seconds (s)</option>
+            </select>
+        </div>
+        <button id="convert-btn">Convert</button>
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        const convertBtn = document.getElementById("convert-btn");
+        const inputValue = document.getElementById("input-value");
+        const inputUnit = document.getElementById("input-unit");
+        const outputUnit = document.getElementById("output-unit");
+        const result = document.getElementById("result");
+
+        // Conversion rates
+        const conversionRates = {
+            m: {
+                m: 1,
+                kg: 0,
+                s: 0
+            },
+            kg: {
+                m: 0,
+                kg: 1,
+                s: 0
+            },
+            s: {
+                m: 0,
+                kg: 0,
+                s: 1
+            }
+        };
+
+        // Function to perform the conversion
+        function convert() {
+            const input = inputValue.value;
+            const fromUnit = inputUnit.value;
+            const toUnit = outputUnit.value;
+
+            const conversionRate = conversionRates[fromUnit][toUnit];
+            const output = input * conversionRate;
+
+            result.innerHTML = `${input} ${fromUnit} = ${output} ${toUnit}`;
+        }
+
+        // Add event listener to the Convert button
+        convertBtn.addEventListener("click", convert);
+    </script>
+</body>
+
+</html>
