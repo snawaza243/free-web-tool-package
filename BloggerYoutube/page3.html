@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>YouTube Playlist Player</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        /* CSS for video player section */
+        #video-container {
+            width: 100%;
+            height: 0;
+            padding-bottom: 56.25%;
+            /* 16:9 aspect ratio */
+            position: relative;
+        }
+
+        #video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* CSS for playlist section */
+        #playlist-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .video-card {
+            width: 48%;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            overflow: hidden;
+            cursor: pointer;
+
+            .video-card:hover {
+                box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+            }
+
+            .video-card img {
+                width: 100%;
+                height: auto;
+            }
+
+            .video-details {
+                padding: 10px;
+                background-color: #f2f2f2;
+            }
+
+            .video-details h3 {
+                margin: 0;
+                font-size: 18px;
+                font-weight: bold;
+            }
+
+            .video-details p {
+                margin: 5px 0;
+                font-size: 14px;
+                color: #666;
+            }
+
+            .active {
+                background-color: #f2f2f2;
+                border-color: #333;
+            }
+
+            /* CSS for responsive layout */
+            @media only screen and (max-width: 768px) {
+                .video-card {
+                    width: 100%;
+                }
+            }
+    </style>
+</head>
+
+<body>
+    <div id="video-container"></div>
+    <div id="playlist-container"></div>
+
+    <script>
+        function loadYouTubePlaylist(playlistId) {
+  // Fetch the playlist data using YouTube Data API
+  const apiKey = 'AIzaSyDhb7446vWfvES-HhVbLWFS9Km4Hy0Bhe0';
+  const apiUrl = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${playlistId}&key=${apiKey}`;
+
+  fetch(apiUrl)
+    .then(response => response.json())
+    .then(data => {
+      const videos = data.items;
+      const firstVideoId = videos[0].snippet.resourceId.videoId;
+
+      // Create video player element
+      const videoContainer = document.getElementById('video-container');
+      const playerHtml = `<iframe id="player" src="https://www.youtube.com/embed/${firstVideoId}?autoplay=1" frameborder="0" allowfullscreen></iframe>`;
+      videoContainer.innerHTML = playerHtml;
+
+      // Create playlist elements
+      const playlistContainer = document.getElementById('playlist-container');
+      playlistContainer.innerHTML = ''; // Clear theprevious playlist items before adding the new ones
+      
+      videos.forEach((video, index) => {
+        const videoId = video.snippet.resourceId.videoId;
+        const videoTitle = video.snippet.title;
+        const videoDescription = video.snippet.description;
+        const thumbnailUrl = video.snippet.thumbnails.medium.url;
+
+        const cardHtml = `
+          <div class="video-card" data-video-id="${videoId}" onclick="playVideo(this)">
+            <img src="${thumbnailUrl}" alt="${videoTitle}">
+            <div class="video-details">
+              <h3>${videoTitle}</h3>
+              <p>${videoDescription}</p>
+            </div>
+          </div>
+        `;
+        playlistContainer.innerHTML += cardHtml;
+
+        // Highlight first video as active
+        if (index === 0) {
+          const firstCard = playlistContainer.firstChild;
+          firstCard.classList.add('active');
+        }
+      });
+    })
+    .catch(error => console.error(error));
+}
+        // function loadYouTubePlaylist(playlistId) {
+        //     // Fetch the playlist data using YouTube Data API
+        //     const apiKey = 'AIzaSyDhb7446vWfvES-HhVbLWFS9Km4Hy0Bhe0';
+        //     const apiUrl = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${playlistId}&key=${apiKey}`;
+
+        //     fetch(apiUrl)
+        //         .then(response => response.json())
+        //         .then(data => {
+        //             const videos = data.items;
+        //             const firstVideoId = videos[0].snippet.resourceId.videoId;
+
+        //             // Create video player element
+        //             const videoContainer = document.getElementById('video-container');
+        //             const playerHtml = `<iframe id="player" src="https://www.youtube.com/embed/${firstVideoId}?autoplay=1" frameborder="0" allowfullscreen></iframe>`;
+        //             videoContainer.innerHTML = playerHtml;
+
+        //             // Create playlist elements
+        //             const playlistContainer = document.getElementById('playlist-container');
+        //             videos.forEach((video, index) => {
+        //                 const videoId = video.snippet.resourceId.videoId;
+        //                 const videoTitle = video.snippet.title;
+        //                 const videoDescription = video.snippet.description;
+        //                 const thumbnailUrl = video.snippet.thumbnails.medium.url;
+
+        //                 const cardHtml = `
+        //   <div class="video-card" data-video-id="${videoId}" onclick="playVideo(this)">
+        //     <img src="${thumbnailUrl}" alt="${videoTitle}">
+        //     <div class="video-details">
+        //       <h3>${videoTitle}</h3>
+        //       <p>${videoDescription}</p>
+        //     </div>
+        //   </div>
+        // `;
+        //                 playlistContainer.innerHTML += cardHtml;
+
+        //                 // Highlight first video as active
+        //                 if (index === 0) {
+        //                     const firstCard = playlistContainer.firstChild;
+        //                     firstCard.classList.add('active');
+        //                 }
+        //             });
+        //         })
+        //         .catch(error => console.error(error));
+        // }
+
+        // function playVideo(card) {
+        //     // Get the video id from the data attribute of the clicked card
+        //     const videoId = card.getAttribute('data-video-id');
+
+        //     // Create player element and replace the current player
+        //     const playerHtml = `<iframe id="player" src="https://www.youtube.com/embed/${videoId}?autoplay=1" frameborder="0" allowfullscreen></iframe>`;
+        //     const videoContainer = document.getElementById('video-container');
+        //     videoContainer.innerHTML = playerHtml;
+
+        //     // Remove active class from all cards and add it to the clicked card
+        //     const playlistContainer = document.getElementById('playlist-container');
+        //     const cards = playlistContainer.querySelectorAll('.video-card');
+        //     cards.forEach(card => card.classList.remove('active'));
+        //     card.classList.add('active');
+        // }
+
+        // // Load the YouTube playlist when the page is loaded
+        window.onload = function () {
+            const playlistId = 'PLWrt9b23q7UEQzxmJh4tAXwU4OBPxEC7O';
+            loadYouTubePlaylist(playlistId);
+        };
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>YouTube Playlist</title>
+    <style>
+        /* CSS styles for the video list and player */
+        body {
+          margin: 0;
+          padding: 0;
+        }
+        #video-list {
+          padding: 20px;
+          box-sizing: border-box;
+        }
+        #video-list li {
+          display: flex;
+          align-items: center;
+          margin-bottom: 10px;
+          cursor: pointer;
+        }
+        #video-list li:hover {
+          background-color: #eee;
+        }
+        #video-list img {
+          width: 120px;
+          height: 90px;
+          margin-right: 10px;
+          object-fit: cover;
+        }
+        #video-list .video-details {
+          flex: 1;
+        }
+        #video-list h3 {
+          margin: 0;
+          font-size: 16px;
+          font-weight: normal;
+        }
+        #video-list p {
+          margin: 0;
+          font-size: 14px;
+          color: #666;
+        }
+        #video-player {
+          background-color: #000;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        video {
+          width: 100%;
+          height: auto;
+          max-height: 70vh;
+        }
+        /* Responsive styles */
+        @media screen and (min-width: 768px) {
+          #video-list {
+            width: 30%;
+            height: 100vh;
+            overflow-y: scroll;
+            position: fixed;
+            top: 0;
+            left: 0;
+          }
+          #video-player {
+            width: 70%;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            right: 0;
+          }
+          #video-list li {
+            margin-bottom: 20px;
+          }
+          #video-list img {
+            width: 100%;
+            height: 200px;
+            margin-right: 0;
+          }
+          #video-list .video-details {
+            padding: 10px;
+          }
+          #video-list h3 {
+            font-size: 18px;
+          }
+          #video-list p {
+            font-size: 16px;
+          }
+        }
+        @media screen and (max-width: 767px) {
+          #video-list {
+            width: 100%;
+            padding: 10px;
+          }
+          #video-list li {
+            flex-direction: column;
+            align-items: flex-start;
+            margin-bottom: 30px;
+          }
+          #video-list img {
+            width: 100%;
+            height: auto;
+            margin-right: 0;
+          }
+          #video-list .video-details {
+            width: 100%;
+            margin-top: 10px;
+          }
+          #video-list h3 {
+            font-size: 16px;
+          }
+          #video-list p {
+            font-size: 14px;
+          }
+          #video-player {
+            margin-top: 70vh;
+          }
+        }
+      </style>
+  </head>
+  <body>
+    <div id="video-list">
+      <!-- List of videos will be displayed here -->
+    </div>
+    <div id="video-player">
+      <!-- Currently playing video will be displayed here -->
+    </div>
+    <script>
+  // JavaScript code for fetching and displaying the videos
+  const API_KEY = 'AIzaSyDhb7446vWfvES-HhVbLWFS9Km4Hy0Bhe0';
+  const PLAYLIST_ID = 'PLWrt9b23q7UEQzxmJh4tAXwU4OBPxEC7O';
+
+  // Make a request to the YouTube API to fetch the videos
+  fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${PLAYLIST_ID}&key=${API_KEY}`)
+    .then(response => response.json())
+    .then(data => {
+      // Loop through the videos and create a list item for each
+      data.items.forEach(item => {
+        const videoId = item.snippet.resourceId.videoId;
+        const videoTitle = item.snippet.title;
+        const thumbnailUrl = item.snippet.thumbnails.medium.url;
+
+        // Create a list item for the video
+        const listItem = document.createElement('li');
+        listItem.classList.add('video-item');
+        listItem.dataset.videoId = videoId;
+
+        // Create an image element for the video thumbnail
+        const thumbnail = document.createElement('img');
+        thumbnail.src = thumbnailUrl;
+        thumbnail.alt = videoTitle;
+        listItem.appendChild(thumbnail);
+
+        // Create a span element for the video title
+        const title = document.createElement('span');
+        title.textContent = videoTitle;
+        listItem.appendChild(title);
+
+        // Add a click event listener to the list item
+        listItem.addEventListener('click', () => {
+          // Get the video ID from the data attribute
+          const videoId = listItem.dataset.videoId;
+
+          // Set the source of the video player to the selected video
+          const videoPlayer = document.querySelector('#video-player video');
+          videoPlayer.src = `https://www.youtube.com/embed/${videoId}`;
+        });
+
+        // Add the list item to the video list
+        const videoList = document.querySelector('#video-list');
+        videoList.appendChild(listItem);
+      })
+    })
+    .catch(error => {
+      console.error('Error fetching videos:', error);
+    });
+    </script>
+  </body>
+</html>
