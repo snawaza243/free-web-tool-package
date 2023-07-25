@@ -1,0 +1,29 @@
+label {
+	display: inline-block;
+	width: 200px;
+	margin-bottom: 5px;
+}
+
+input[type="number"] {
+	width: 100px;
+	padding: 5px;
+	margin-bottom: 10px;
+}
+
+#semester-fields {
+	margin-bottom: 10px;
+}
+
+.semester-field {
+	margin-bottom: 5px;
+}
+
+.add-btn {
+	margin-left: 5px;
+	padding: 0 5px;
+	font-size: 20px;
+	line-height: 20px;
+	border: none;
+	background-color: #ccc;
+	cursor: pointer;
+}

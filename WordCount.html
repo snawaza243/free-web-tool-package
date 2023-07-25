@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Word Count Tool</title>
+
+</head>
+
+<body>
+    <h1>Word Count Tool</h1>
+    <div class="form-container">
+        <label for="text">Enter text:</label>
+        <textarea id="text" name="text"></textarea>
+        <div class="features-button">
+            <select id="language" name="language">
+                <option value="english">English</option>
+                <option value="spanish">Spanish</option>
+                <option value="french">French</option>
+            </select>
+            <input type="button" id="reload-button" onclick="location.reload()" value="↻ Reload" title="Reload Page">
+            <input type="button" id="clear-button" onclick="clear_input()" value="🧹Clear" title="Clear Input">
+            <input type="button" id="copy-button" onclick="copyButton()" value="📄Copy" title="Copy Input">
+            <input type="button" id="copy-button" onclick="onClickPate()" value="🗒️Paste" title="Paste Copied">
+            <span class="speed-text">Speed: <span id="result"></span>
+        </div>
+        </span>
+    </div>
+
+    <div class="container-0">
+        <div class="container-1">
+            <div id="results-container">
+                <div class="results-label">Word Count:
+                    <span id="word-count" class="results-value">0</span>
+                </div>
+
+                <div class="results-label">Space Count:
+                    <span id="space-count" class="results-value">0</span>
+                </div>
+                <div class="results-label">Letter Count:
+                    <span id="letter-count" class="results-value">0</span>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="contianer-3">
+            <div id="results-container">
+                <div class="results-label">Digit Count:
+                    <span id="digit-count" class="results-value">0</span>
+                </div>
+                <div class="results-label">Special Character :
+                    <span id="special-count" class="results-value">0</span>
+                </div>
+                <div class="results-label">Uppercase Letter :
+                    <span id="uppercase-count" class="results-value">0</span>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="container-2">
+            <div id="results-container">
+                <div class="results-label">Lowercase Letter :
+                    <span id="lowercase-count" class="results-value">0</span>
+                </div>
+                <div class="results-label">Mistake Word : **
+                    <span id="mistake-count" class="results-value">0</span>
+                </div>
+                <div class="results-label">Correct Word : **
+                    <span id="correct-count" class="results-value">0</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        /* Form styles */
+        .form-container {
+            display: block;
+            margin: 20px;
+        }
+
+        .form-container label {
+            display: block;
+            margin-bottom: 5px;
+
+        }
+
+        .form-container textarea {
+            width: 100%;
+            height: 200px;
+            padding: 5px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            resize: none;
+            margin-bottom: 15px;
+        }
+
+        .form-container input[type="button"] {
+            /* Shared styles with features button */
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            ;
+        }
+
+        .speed-text {
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            ;
+            width: 140px;
+        }
+
+        .form-container input[type="submit"] {
+            margin-top: 10px;
+            padding: 5px;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .form-container input[type="button"]:hover {
+            cursor: pointer;
+        }
+
+        /* Results container styles */
+        #results-container {
+            width: 250px;
+        }
+
+        #results-container div {
+            margin: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            ;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #word-count {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        #word-count span {
+            font-size: 16px;
+            font-weight: normal;
+        }
+
+        .features-button {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .features-button select {
+            background-color: unset;
+        }
+
+        /* Features button styles */
+        .features-button select,
+        .features-button input {
+            margin-right: 10px;
+        }
+
+        .features-button input[type="button"] {
+            /* Shared styles with form button */
+            width: 80px;
+            transition: all ease 0.4s;
+            border: none;
+
+        }
+
+        #reload-button {
+            background-color: red;
+            color: white;
+        }
+
+        #clear-button {
+            background-color: blue;
+            color: white;
+        }
+
+        #copy-button {
+            background-color: #1BDB94;
+            color: white;
+        }
+
+        #reload-button:hover,
+        #clear-button:hover,
+        #copy-button:hover {
+            box-shadow: 5px 5px black;
+        }
+
+        /* Grid container styles */
+        .container-0 {
+            display: grid;
+            grid-template-columns: auto;
+            justify-content: center;
+        }
+
+        /* Responsive media queries */
+        @media screen and (min-width: 568px) {
+            .container-0 {
+                grid-template-columns: auto auto;
+            }
+        }
+
+        @media screen and (min-width: 1200px) {
+            .container-0 {
+                grid-template-columns: auto auto auto;
+            }
+        }
+
+        /* Select input styles */
+        .form-container select {
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            ;
+        }
+
+        /* Results container span all columns */
+        .results-container {
+            grid-column: span;
+        }
+    </style>
+
+    <script>
+        // Get the input elements
+        var textInput = document.getElementById("text");
+        var languageInput = document.getElementById("language");
+        var wordCountOutput = document.getElementById("word-count");
+        var spaceCountOutput = document.getElementById("space-count");
+        var mistakeCountOutput = document.getElementById("mistake-count");
+        var correctCountOutput = document.getElementById("correct-count");
+        var letterCountOutput = document.getElementById("letter-count");
+        var uppercaseCountOutput = document.getElementById("uppercase-count");
+        var lowercaseCountOutput = document.getElementById("lowercase-count");
+        var digitCountOutput = document.getElementById("digit-count");
+        var specialCountOutput = document.getElementById("special-count");
+
+        // Add an event listener to the text input to count words and letters on input change
+        textInput.addEventListener("input", countWordsAndLetters);
+
+        function clear_input() {
+            textInput.value = "";
+        }
+
+        function countWordsAndLetters() {
+            // Get the input text and language
+            var text = textInput.value;
+            var language = languageInput.value;
+
+            // Split the text into words
+            var words = text.split(/\b\S+\b/g);
+
+            // Initialize counters
+            var wordCount = words.length;
+            var spaceCount = text.split(" ").length - 1;
+            var mistakeCount = 0;
+            var correctCount = 0;
+            var letterCount = 0;
+            var uppercaseCount = 0;
+            var lowercaseCount = 0;
+            var digitCount = 0;
+            var specialCount = 0;
+
+            // Count the number of correct and mistake words based on the language
+            switch (language) {
+                case "english":
+                    var correctWords = ["the", "and", "a", "an", "in", "on", "at", "to", "of", "for"];
+                    break;
+                case "spanish":
+                    var correctWords = ["el", "la", "los", "las", "un", "una", "en", "a", "ante", "bajo"];
+                    break;
+                case "french":
+                    var correctWords = ["le", "la", "les", "un", "une", "de", "du", "au", "à", "en"];
+                    break;
+                default:
+                    var correctWords = [];
+                    break;
+            }
+            for (var i = 0; i < words.length; i++) {
+                if (correctWords.includes(words[i].toLowerCase())) {
+                    correctCount++;
+                } else {
+                    mistakeCount++;
+                }
+            }
+
+            // Count the number of letters, uppercase letters, lowercase letters, digits, and special characters
+            for (var i = 0; i < text.length; i++) {
+                var char = text.charAt(i);
+                if (/[a-zA-Z]/.test(char)) {
+                    letterCount++;
+                    if (/[A-Z]/.test(char)) {
+                        uppercaseCount++;
+                    } else {
+                        lowercaseCount++;
+                    }
+                } else if (/\d/.test(char)) {
+                    digitCount++;
+                } else if (/\W/.test(char)) {
+                    specialCount++;
+                }
+            }
+
+            // Display the results
+            wordCountOutput.innerHTML = wordCount;
+            spaceCountOutput.innerHTML = spaceCount;
+            mistakeCountOutput.innerHTML = mistakeCount;
+            correctCountOutput.innerHTML = correctCount;
+            letterCountOutput.innerHTML = letterCount;
+            uppercaseCountOutput.innerHTML = uppercaseCount;
+            lowercaseCountOutput.innerHTML = lowercaseCount;
+            digitCountOutput.innerHTML = digitCount;
+            specialCountOutput.innerHTML = specialCount;
+        }
+
+
+
+        // Get the input and button elements
+        var textInput = document.getElementById("text");
+        var copyButton = document.getElementById("copy-button");
+
+        // Add an event listener to the copy button to copy the input text to the clipboard on click
+        copyButton.addEventListener("click", copyInputText);
+
+        function copyInputText() {
+            // Copy the input text to the clipboard
+            textInput.select();
+            document.execCommand("copy");
+
+
+
+            // Display a message indicating that the text has been copied for 2 seconds
+            var message = document.createElement("div");
+            message.innerHTML = "Text copied to clipboard!";
+            message.style.position = "fixed";
+            message.style.top = "10px";
+            message.style.left = "50%";
+            message.style.transform = "translateX(-50%)";
+            message.style.padding = "10px";
+            message.style.background = "#fff";
+            message.style.border = "1px solid #000";
+            message.style.boxShadow = "0 0 10px #000";
+            message.style.zIndex = "9999";
+            message.style.transition = "all ease 0.4s";
+
+            document.body.appendChild(message);
+            setTimeout(function () {
+                document.body.removeChild(message);
+            }, 2000);
+        }
+
+
+        // Get the input and result elements
+        var textInput = document.getElementById("text");
+        var resultElement = document.getElementById("result");
+
+        // Initialize variables for word count and time taken
+        var wordCount = 0;
+        var startTime = null;
+        var endTime = null;
+
+        // Add an event listener to the input element to start the timer on input focus
+        textInput.addEventListener("focus", startTimer);
+
+        // Add an event listener to the input element to update the word count on input change
+        textInput.addEventListener("input", updateWordCount);
+
+        function startTimer() {
+            // Set the start time to the current time
+            startTime = new Date();
+        }
+
+        function updateWordCount() {
+            // Get the input text and split it into words
+            var text = textInput.value;
+            var words = text.trim().split(/\s+/);
+
+            // Update the word count
+            wordCount = words.length;
+
+            // Check if the input text is empty or all whitespace
+            if (!text.trim()) {
+                wordCount = 0;
+            }
+
+            // Update the result element with the typing speed
+            if (wordCount > 0 && startTime !== null) {
+                // Calculate the time taken in seconds
+                endTime = new Date();
+                var timeTaken = (endTime.getTime() - startTime.getTime()) / 1000;
+
+                // Calculate the typing speed in words per minute (wpm)
+                var typingSpeed = Math.round(wordCount / (timeTaken / 60));
+
+                // Display the typing speed in the result element
+                resultElement.innerHTML = " " + typingSpeed + " wpm";
+            }
+        }
+
+
+
+        const pasteButton = document.getElementById('paste-button');
+        function onClickPate() {
+            const clipboardData = navigator.clipboard || window.clipboardData;
+            clipboardData.readText().then((copiedText) => {
+                text.value = copiedText;
+
+            }).catch((err) => {
+                console.error('Failed to read clipboard data: ', err);
+            });
+        }
+
+    </script>
+
+</body>
+
+</html>
